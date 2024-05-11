@@ -1,0 +1,89 @@
+---
+title: "Registro de pacientes que sufrieron insuficiencia cardíaca"
+author: "Corina y Jenny"
+format: html
+toc: true
+lang: es
+theme: yeti
+---
+
+# Introducción
+
+La finalidad de este trabajo es mostrar el resultado de cada consulta, tanto en hombres y mujeres utilizando esta [fuente de datos](https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/s12911-020-1023-5).
+
+# Carga de paquetes
+
+```{r}
+#| label: carga-paquetes
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(knitr)
+library(dplyr)
+```
+
+# Carga de datos
+
+```{r}
+#| label: carga-datos
+#| message: false
+#| warning: false
+
+pacientes <- read_csv("heart_failure_clinical_records_dataset.csv")
+```
+
+## Consulta 1
+
+```{r}
+#| label: consulta-01
+
+# Hombres mayores de 70 años, diabéticos y no anémicos mostrados en orden descendente.
+
+pacientes |>
+  filter( sex == "1" & diabetes == "1" & anaemia == "0" & high_blood_pressure == "1" & age >=70) |>
+select(age, sex, diabetes, anaemia, high_blood_pressure)|>
+  arrange(desc(age)) |>
+  kable()
+```
+
+## Consulta 02
+
+```{r}
+#| label: consulta-02
+
+# Mujeres con fracción de eyección entre 20 (inclusive) y 25 (inclusive), en orden descendente de fracción de eyección.
+
+pacientes |>
+  filter( sex == "0")|>
+select(sex, ejection_fraction, anaemia, diabetes)
+```
+
+## Consulta 3
+
+```{r}
+#| label: consulta-03
+
+# Promedio de creatinina sérica de pacientes sobrevivientes y de pacientes fallecidos.
+
+pacientes |>
+  select(serum_creatinine, DEATH_EVENT)
+```
+
+## Consulta 4
+
+```{r}
+#| label: consulta-04
+
+pacientes |>
+  filter(sex == "0" & anaemia == "1" & diabetes == "1") |>
+  select(sex, serum_creatinine, anaemia, diabetes)
+```
+
+
+
+
+
+
+
+
