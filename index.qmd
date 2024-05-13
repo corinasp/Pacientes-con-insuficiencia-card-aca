@@ -58,8 +58,8 @@ pacientes |>
   filter( sex == "0")|>
   group_by(sex, ejection_fraction, anaemia, diabetes) |>
   arrange(desc(ejection_fraction)) |>
- summarise(ejection_fraction = min(ejection_fraction, na.rm = FALSE),
-    ejection_fraction = max(ejection_fraction, na.rm = FALSE),
+ summarise(ejection_fraction = min (ejection_fraction, na.rm = FALSE),
+    ejection_fraction = max (ejection_fraction, na.rm = FALSE),
     n = n()) |>
   kable()
 ```
