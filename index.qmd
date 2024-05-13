@@ -56,7 +56,12 @@ select(age, sex, diabetes, anaemia, high_blood_pressure)|>
 
 pacientes |>
   filter( sex == "0")|>
-select(sex, ejection_fraction, anaemia, diabetes)
+  group_by(sex, ejection_fraction, anaemia, diabetes) |>
+  arrange(desc(ejection_fraction)) |>
+ summarise(ejection_fraction = min(ejection_fraction, na.rm = FALSE),
+    ejection_fraction = max(ejection_fraction, na.rm = FALSE),
+    n = n()) |>
+  kable()
 ```
 
 ## Consulta 3
@@ -67,7 +72,10 @@ select(sex, ejection_fraction, anaemia, diabetes)
 # Promedio de creatinina sérica de pacientes sobrevivientes y de pacientes fallecidos.
 
 pacientes |>
-  select(serum_creatinine, DEATH_EVENT)
+ group_by(DEATH_EVENT)|>
+  summarise(serum_creatinine = mean(serum_creatinine, na.rm = TRUE),
+            n = n()) |>
+kable()
 ```
 
 ## Consulta 4
@@ -75,9 +83,14 @@ pacientes |>
 ```{r}
 #| label: consulta-04
 
+# Valor máximo de creatinina sérica de las mujeres que son anémicas o diabéticas.
+
 pacientes |>
-  filter(sex == "0" & anaemia == "1" & diabetes == "1") |>
-  select(sex, serum_creatinine, anaemia, diabetes)
+  filter(sex == "0" & anaemia ==  "1" | diabetes == "1") |>
+  group_by(anaemia, diabetes) |>
+  summarise(serum_creatinine = max(serum_creatinine, na.rm = TRUE),
+    n = n()) |>
+    kable()
 ```
 
 
